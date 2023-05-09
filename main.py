@@ -9,6 +9,9 @@ running = True
 
 hero_image = pygame.image.load("C:/kooliProjekt/Untitled.png")
 
+hero_x = 500
+hero_y = 300
+
 while running:
     # poll for events
     # pygame.QUIT event means the user clicked X to close your window
@@ -19,8 +22,18 @@ while running:
     # fill the screen with a color to wipe away anything from last frame
     screen.fill((0, 0, 0))
 
-    hero_x = 500
-    hero_y = 300
+
+
+    if event.type == pygame.KEYDOWN:
+        if event.key == pygame.K_UP:
+            hero_y -= 1
+        elif event.key == pygame.K_DOWN:
+            hero_y += 1
+        elif event.key == pygame.K_LEFT:
+            hero_x -= 1
+        elif event.key == pygame.K_RIGHT:
+            hero_x += 1
+
 
     # blit the hero image onto the screen
     screen.blit(hero_image, (hero_x, hero_y ))
