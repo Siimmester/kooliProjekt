@@ -38,7 +38,8 @@ while running:
         if acceleration < 1:
             acceleration = 1
         elif event.key == pygame.K_UP and acceleration != 1:
-            acceleration = acceleration / 1.5
+            acceleration = acceleration / 1.1
+
 
     movement = math.log(acceleration, 6)
     hero_y -= movement
