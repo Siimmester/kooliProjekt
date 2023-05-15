@@ -24,26 +24,39 @@ while running:
     # fill the screen with a color to wipe away anything from last frame
     screen.fill((0, 0, 0))
 
+    keys = pygame.key.get_pressed()
+    if keys[pygame.K_UP]:
+        acceleration += 150
+    if keys[pygame.K_RIGHT]:
+        hero_x += 1
+    if keys[pygame.K_LEFT]:
+        hero_x -= 1
 
-
-    if event.type == pygame.KEYDOWN:
-        if event.key == pygame.K_UP:
-            acceleration += 150
-        elif event.key == pygame.K_LEFT:
-            hero_x -= 1
-        elif event.key == pygame.K_RIGHT:
-            hero_x += 1
 
     if event.type == pygame.KEYUP:
         if acceleration < 1:
             acceleration = 1
         elif event.key == pygame.K_UP and acceleration != 1:
-            acceleration = acceleration / 1.5
+            acceleration = acceleration / 1.1
 
-    movement = math.log(acceleration, 6)
+    movement = math.log(acceleration, 4)
     hero_y -= movement
+
+    if hero_y < -100:
+        hero_y = 1200
+
+    if hero_y > 1200:
+        hero_y = -100
+
+    if hero_x < -100:
+        hero_x = 2000
+
+    if hero_x > 2000:
+        hero_x = -100
+
+
     # blit the hero image onto the screen
-    screen.blit(hero_image, (hero_x, hero_y ))
+    screen.blit(hero_image, (hero_x, hero_y))
 
     # flip() the display to put your work on screen
     pygame.display.flip()
