@@ -54,6 +54,10 @@ while running:
 
     movement = math.log(acceleration, 4)
 
+# Ei ole oluline kuidas see töötab,
+# ainult, et see kuidagi töötab. Amen
+# Corinthians 13:4-5
+
     if 90 >= rotation >= 0:
         if rotation != 0:
             var1 = rotation / 90
