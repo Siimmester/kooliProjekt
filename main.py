@@ -30,8 +30,8 @@ while running:
     keys = pygame.key.get_pressed()
     if keys[pygame.K_UP]:
         if time_helddown < 1:
-            time_helddown += 0.005
-        acceleration += 150 * time_helddown
+            time_helddown += 0.01
+        acceleration += 300 * time_helddown
 
     if keys[pygame.K_RIGHT]:
         if rotation >= 360:
@@ -46,11 +46,12 @@ while running:
             rotation -= 360
         rotation += 1
 
-    if event.type == pygame.KEYUP:
-        if acceleration < 1:
-            acceleration = 1
-        elif event.key != pygame.K_DOWN and acceleration != 1:
-            acceleration = acceleration / 1.6
+    if time_helddown > 0:
+        time_helddown -= 0.01
+    if acceleration < 1:
+        acceleration = 1
+    elif not keys[pygame.K_UP] and acceleration != 1:
+        acceleration = acceleration / 1.03
 
     movement = math.log(acceleration, 4)
 
@@ -96,7 +97,7 @@ while running:
         hero_y -= var2
         hero_x += var3
 
-    print(var2, var1, rotation, movement)
+    print(var2, var1, rotation, movement, acceleration)
 
     if hero_y < -100:
         hero_y = 1200
