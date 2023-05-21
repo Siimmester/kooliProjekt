@@ -1,6 +1,7 @@
 # Example file showing a basic pygame "game loop"
 import pygame
 import math
+import random
 
 # pygame setup
 pygame.init()
@@ -8,7 +9,8 @@ screen = pygame.display.set_mode((1910, 1070))
 clock = pygame.time.Clock()
 running = True
 
-hero_image = pygame.image.load("C:/kooliProjekt/Untitled.png")
+hero_image = pygame.image.load("C:\kooliProjekt/Untitled.png")
+asteroid_image = pygame.image.load("C:\kooliProjekt/Untitled.png")
 
 hero_x = 1800
 hero_y = 1000
@@ -17,13 +19,29 @@ time_helddown = 0
 rotation = 0
 var1 = 1
 var2 = 0
+
+asteroids = []
+asteroid_speed_range = (1, 3)
+
+for _ in range(10):
+    x = random.randint(0, 1910)
+    y = random.randint(0, 1070)
+    speed = random.uniform(*asteroid_speed_range)
+    angle = random.uniform(0, 360)
+    asteroids.append({
+        "x": x,
+        "y": y,
+        "speed": speed,
+        "angle": angle
+    })
+
 while running:
     # poll for events
     # pygame.QUIT event means the user clicked X to close your window
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             running = False
-
+            
     # fill the screen with a color to wipe away anything from last frame
     screen.fill((0, 0, 0))
 
@@ -39,6 +57,7 @@ while running:
         elif rotation <= 0:
             rotation += 360
         rotation -= 1
+
     if keys[pygame.K_LEFT]:
         if rotation <= 0:
             rotation += 360
@@ -54,10 +73,10 @@ while running:
         acceleration = acceleration / 1.03
 
     movement = math.log(acceleration, 4)
-
-# Ei ole oluline kuidas see töötab,
-# ainult, et see kuidagi töötab. Amen
-# Corinthians 13:4-5
+    
+    # Ei ole oluline kuidas see töötab,
+    # ainult, et see kuidagi töötab. Amen
+    # Corinthians 13:4-5
 
     if 90 >= rotation >= 0:
         if rotation != 0:
@@ -97,8 +116,6 @@ while running:
         hero_y -= var2
         hero_x += var3
 
-    print(var2, var1, rotation, movement, acceleration)
-
     if hero_y < -100:
         hero_y = 1200
 
@@ -111,12 +128,32 @@ while running:
     if hero_x > 2000:
         hero_x = -100
 
+    for asteroid in asteroids:
+        rad_angle = math.radians(asteroid["angle"])
+        delta_x = asteroid["speed"] * math.cos(rad_angle)
+        delta_y = asteroid["speed"] * math.sin(rad_angle)
+        asteroid["x"] += delta_x
+        asteroid["y"] += delta_y
+
+        if asteroid["x"] > 1910:
+            asteroid["x"] = 0
+        elif asteroid["x"] < 0:
+            asteroid["x"] = 1910
+        if asteroid["y"] > 1070:
+            asteroid["y"] = 0
+        elif asteroid["y"] < 0:
+            asteroid["y"] = 1070
+
+        asteroid_rect = asteroid_image.get_rect()
+        asteroid_rect.center = (asteroid["x"], asteroid["y"])
+        screen.blit(asteroid_image, asteroid_rect)
+    
     # blit the hero image onto the screen
     screen.blit(hero_image, (hero_x, hero_y))
-
+    
     # flip() the display to put your work on screen
     pygame.display.flip()
 
-    clock.tick(60)  # limits FPS to 60
+    clock.tick(60) # limits FPS to 60
 
 pygame.quit()
